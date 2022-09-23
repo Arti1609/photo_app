@@ -1,0 +1,31 @@
+{% extends "__base__.html" %}
+{% load static %}
+{% block title %}Moje rezerwacje{% endblock %}
+{% block content %}
+    <table>
+    <tr>
+        <td><strong>Data złożenia rezerwacji</strong></td>
+        <td><strong>Termin rezerwacji</strong></td>
+        <td><strong>Email</strong></td>
+        <td><strong>telefon</strong></td>
+        <td><strong>Rodzaj sesji</strong></td>
+        <td><strong>Status</strong></td>
+    </tr>
+    {% for r in reservations %}
+    <tr>
+        <td>{{ r.report_date }}</td>
+        <td>{{ r.date }}</td>
+        <td>{{ r.user.email }}</td>
+        <td>{{ r.phone_number }}</td>
+        <td>{{ r.package.sessions.name }}</td>
+        <td>
+            {% if r.status %}
+            zaakceptowano
+            {% else %}
+                niezaakceptowano
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

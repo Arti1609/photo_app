@@ -1,0 +1,19 @@
+{% extends "__base__.html" %}
+{% load static %}
+{% block title %}Detail Sesion{% endblock %}
+{% block content %}
+    <h1>{{ detail.name }}</h1>
+    <h2>{{ detail.description }}</h2>
+    <br>
+    <br>
+    <ul>
+        {% for package in packages %}
+        <li>
+            <h2><a href="/reservation/{{ package.id }}">{{ package.name}}</a></h2>
+            <h3>{{ package.description}}</h3>
+            <p> {{ package.price }} zł</p>
+            <p> {{ package.duration }} minut </p>
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "__base__.html" %}
+{% load static %}
+{% block title %}Details{% endblock %}
+{% block content %}
+    <p>Imię: {{ object.user.first_name }}</p>
+    <p>Nazwisko: {{ object.user.last_name }}</p>
+    <p>Rodzaj sesji: {{ object.package.sessions.name }}</p>
+    <p>Pakiet: {{ object.package.name }}</p>
+    <p>Komentarz: {{ object.comment }}</p>
+    <p>Status: {% if object.status %}
+            zaakceptowano
+            {% else %}
+                <form action="/accept/{{ object.pk }}">
+                    <input type="submit" value="zaakceptuj">
+                </form>
+            {% endif %}
+    </p>
+    <form action="/edit-reservation/{{ object.pk }}">
+                    <input type="submit" value="edytuj">
+                </form>
+{% endblock %}

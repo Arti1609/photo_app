@@ -1,0 +1,13 @@
+{% extends "__base__.html" %}
+{% load static %}
+{% block title %}Details{% endblock %}
+{% block content %}
+    <form method="POST" action="">
+        {% csrf_token %}
+        <input type="date" name="date">
+        <input type="time" name="time">
+        <input type="text" name="phone_number" placeholder="numer telefonu">
+        <input type="textarea" name="comment" placeholder="zostaw komentarz">
+    <input type="submit" value="rezerwuj">
+    </form>
+{% endblock %}
