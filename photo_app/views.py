@@ -15,18 +15,33 @@ from django.urls import reverse_lazy, reverse
 
 
 # Create your views here.
-# w
+
 class SuperuserRequiredMixin(UserPassesTestMixin):
     def test_func(self): #true albo false
+        """
+        sprawdza czy użytkownik jest superuserem
+        :return: zwraca superusera
+        """
         return self.request.user.is_superuser
+
 
 class MainView(View):
     def get(self, request):
+        """
+
+        :param request:
+        :return: strona główna
+        """
         return render(request, template_name='index.html')
 
 
 class PhotoShootView(View):
     def get(self, request):
+        """
+        dostępne typy sesji z bazy danych.
+        :param request:
+        :return:Typy sesji zdjęciowych
+        """
         photo_types = PhotoShootType.objects.all()
         ctx = {
             'photo_types': photo_types
@@ -36,10 +51,18 @@ class PhotoShootView(View):
 
 class PhotoDetailsView(View):
     def get(self, request, id, *args, **kwargs):
+        """
+
+        :param request:
+        :param id: typ sesji
+        :param args:
+        :param kwargs:
+        :return:szczegóły danego typu sesji
+        """
         try:
             detail = PhotoShootType.objects.get(pk=id)
         except PhotoShootType.DoesNotExist:
-            return Http404("No photo session found!")
+            raise Http404("No photo session found!")
         packages = Package.objects.filter(sessions=detail)
         ctx = {
             'detail': detail,
@@ -48,10 +71,23 @@ class PhotoDetailsView(View):
         return render(request, template_name='photo_detail.html', context=ctx)
 
 
-class ReservationView(LoginRequiredMixin, View,):
-    login_url = '/login/'
+class ReservationView(LoginRequiredMixin, View):
+    login_url = '/login/' #przekierowanie do strony logowania
+
+    def get_success_url(self):
+        next_url = self.request.GET.get('next', None)
+        if next_url:
+            return "%s" % next_url
+        else:
+            return reverse('main')
 
     def get(self, request, id):
+        """
+
+        :param request:
+        :param id:
+        :return:formularz rezerwacji o ile istnieje dany pakiet
+        """
         try:
             package = Package.objects.get(pk=id)
         except Reservations.DoesNotExist:
@@ -106,7 +142,7 @@ class LoginView(FormView):
     def get_success_url(self):
         next_url = self.request.GET.get('next', None)
         if next_url:
-            return "%s" % (next_url)
+            return "%s" % next_url
         else:
             return reverse('main')
 
